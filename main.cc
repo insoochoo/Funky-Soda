@@ -28,6 +28,7 @@ void uMain::main(){
                 }
             case 2:
                 fname = argv[1];
+            case 1:
                 break;
             default:
                 usage(argv[0]);
