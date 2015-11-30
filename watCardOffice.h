@@ -5,7 +5,7 @@ _Task WATCardOffice{
     Bank &bank;
     unsigned int numCouriers;
     Courier *couriers;
-    std::queue<Job> jobs;
+    std::queue<Job*> jobs;
     uCondition jobLock;
 
     struct Args{

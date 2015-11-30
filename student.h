@@ -8,11 +8,12 @@ _Task Student {
     Groupoff &groupoff;
     unsigned int id;
     unsigned int maxPurchases;
+    unsigned int boughtCount;
 
     void main();
   public:
-    Student( Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
-             unsigned int id, unsigned int maxPurchases );
+    Student(Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
+             unsigned int id, unsigned int maxPurchases);
 };
 
 #endif // __STUDENT_H__

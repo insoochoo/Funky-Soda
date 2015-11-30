@@ -2,6 +2,7 @@
 #include "bank.h"
 #include "watCardOffice.h"
 
+
 WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers){
     for (unsigned int i = 0; i < numCouriers; i++) {
         couriers[i] = new Courier(i);
@@ -14,26 +15,26 @@ WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount){
     WATCard *watCard = new WATCard();
 
     Args args = {sid, amount, watCard};
-    Job job(args);
+    Job *job = new Job(args);
 
     jobs.push(job);
     //tell blocked tasks to wake up
     jobLock.signal();
 
-    return watCard::FWATCard;
+    return job->result;
 }
 
 WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount, WATCard *card){
     //print transfer
 
     Args args = {sid, amount, card};
-    Job job(args);
+    Job *job = new Job(args);
 
     jobs.push(job);
     //tell blocked tasks to wake up
     jobLock.signal();
 
-    return watCard::FWATCard;
+    return job->result;
 }
 
 Job *WATCardOffice::requestWork(){
@@ -77,13 +78,17 @@ void WATCardOffice::Courier::main(){
             bank.withdraw(currJob->args.id, currJob->args.amount);
             currJob->args.watCard->deposit(currJob->args.amount);
 
-
             if(mprng(1,6) == 1){ //lose watCard :(
                 // TODO: review this (What is "insert into future"?)
+                currJob->result.reset();
+                currJob->result.exception(new WATCardOffice::Lost);
                 delete currJob->args.watCard;
-                // throw WATCardOffice::Lost;
             }
-
+            else{
+                currJob->result.reset();
+                currJob->result.delivery(currJob->args.watCard);
+                //print something
+            }
             // print transfer finished
             delete currJob;
         }
