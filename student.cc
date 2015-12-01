@@ -16,7 +16,7 @@ void Student::main(){
     int favoriteFlavour = mprng(0, 3);
 
     // favourite soda f , number of bottles b to purchase
-    prt.print(Printer::Student, 'S', favoriteFlavour, numberOfBottles);
+    prt.print(Printer::Student, 'S', id, favoriteFlavour, numberOfBottles);
 
     WATCard::FWATCard watCard = cardOffice.create(id, 5);
     WATCard::FWATCard giftCard = groupoff.giftCard();
@@ -25,7 +25,7 @@ void Student::main(){
     VendingMachine* vendingMachine = nameServer.getMachine(id);
 
     // vending machine v selected
-    prt.print(Printer::Student, 'V', vendingMachine->getId());
+    prt.print(Printer::Student, 'V', id, vendingMachine->getId());
 
     bool lost = false;
 
@@ -43,11 +43,11 @@ void Student::main(){
             _Select(watCard){
                 vendingMachine->buy(VendingMachine::Flavours(favoriteFlavour), *watCard);
                 // watcard balance b after purchase
-                prt.print(Printer::Student, 'B', watCard()->getBalance());
+                prt.print(Printer::Student, 'B', id, watCard()->getBalance());
             } or _Select(giftCard){
                 vendingMachine->buy(VendingMachine::Flavours(favoriteFlavour), *giftCard);
                 // giftcard balance b
-                prt.print(Printer::Student, 'G', giftCard()->getBalance());
+                prt.print(Printer::Student, 'G', id, giftCard()->getBalance());
                 giftCard.reset();
             } // blocks waiting for money to be transferred
 
@@ -58,12 +58,12 @@ void Student::main(){
             vendingMachine = nameServer.getMachine(id);
         } catch(WATCardOffice::Lost){
             //print lost watcard
-            prt.print(Printer::Student, 'L');
+            prt.print(Printer::Student, 'L', id);
 
             watCard = cardOffice.create(id, 5);
             lost = true;
         }
     }
     //print finish
-    prt.print(Printer::Student, 'F');
+    prt.print(Printer::Student, 'F', id);
 }
