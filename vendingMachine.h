@@ -2,6 +2,7 @@
 #define __VENDINGMACHINE_H__
 
 #include "watCard.h"
+_Task NameServer;
 
 _Task VendingMachine {
     Printer &prt;

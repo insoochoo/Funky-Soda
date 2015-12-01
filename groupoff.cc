@@ -14,6 +14,7 @@ WATCard::FWATCard Groupoff::giftCard(){
 
 void Groupoff::main() {
     //print start
+    prt.print(Printer::Groupoff, 'S');
 
     for (unsigned int i = 0; i < numStudents; i++){
         _Accept(Groupoff::giftCard);
@@ -33,6 +34,10 @@ void Groupoff::main() {
                 yield(groupoffDelay);
                 WATCard *watCard = new WATCard();
                 watCard->deposit(sodaCost);
+
+                // print gift amount deposited
+                prt.print(Printer::Groupoff, 'D', sodaCost);
+
                 fwatcards[randomize].reset();
                 fwatcards[randomize].delivery(watCard);
                 counter++;
@@ -41,4 +46,5 @@ void Groupoff::main() {
     }
 
     //print finished
+    prt.print(Printer::Groupoff, 'F');
 }

@@ -13,8 +13,6 @@ WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers)
 };
 
 WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount){
-    //print create
-
     WATCard *watCard = new WATCard();
 
     Args args = {sid, amount, watCard};
@@ -24,12 +22,13 @@ WATCard::FWATCard WATCardOffice::create(unsigned int sid, unsigned int amount){
     //tell blocked tasks to wake up
     jobLock.signal();
 
+    // student s transfer amount a, call completed
+    prt.print(Printer::WATCardOffice, 'C', sid, amount);
+
     return job->result;
 }
 
 WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount, WATCard *card){
-    //print transfer
-
     Args args = {sid, amount, card};
     Job *job = new Job(args);
 
@@ -37,26 +36,44 @@ WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount,
     //tell blocked tasks to wake up
     jobLock.signal();
 
+    // print transfer completed: student s, transfer amount a
+    prt.print(Printer::WATCardOffice, 'T', sid, amount);
     return job->result;
 }
 
 WATCardOffice::Job *WATCardOffice::requestWork(){
-    //print
     if(jobs.empty()){
         jobLock.wait();
     }
 
     WATCardOffice::Job *temp = jobs.front();
     jobs.pop();
+
+    // print request work complete
+    prt.print(Printer::WATCardOffice, 'W');
     return temp;
 }
 
 void WATCardOffice::main(){
     //print starting
-    _Accept(~WATCardOffice){
-        // do something
+    prt.print(Printer::WATCardOffice, 'S');
+    while(true){
+        _Accept(~WATCardOffice){
+
+            while(!jobs.empty()){
+                WATCardOffice::Job *temp = jobs.front();
+                jobs.pop();
+                delete temp;
+            }
+
+            for(unsigned int i = 0; i < numCouriers; i++){
+                delete couriers[i];
+            }
+            delete couriers;
+        } or _Accept(WATCardOffice::create){} or _Accept(WATCardOffice::transfer){} or _Accept(WATCardOffice::requestWork){}
     }
     //print finished
+    prt.print(Printer::WATCardOffice, 'F');
 }
 
 WATCardOffice::Courier::Courier(unsigned int id, Bank &bank, Printer &printer, WATCardOffice &cardOffice)
@@ -65,24 +82,27 @@ WATCardOffice::Courier::Courier(unsigned int id, Bank &bank, Printer &printer, W
 
 void WATCardOffice::Courier::main(){
     //print start
+    printer.print(Printer::Courier, 'S');
 
     while(true){
         _Accept(~Courier){
             break;
         } _Else {
-            // print transfer start
-
             Job *currJob = cardOffice.requestWork();
             if(currJob == NULL){ //error check
                 break;
             }
+            // print transfer start: student s requesting transfer, amount a of transfer
+            printer.print(Printer::Courier, 't', currJob->args.id, currJob->args.amount);
 
             // update
             bank.withdraw(currJob->args.id, currJob->args.amount);
             currJob->args.watCard->deposit(currJob->args.amount);
 
+            // print transfer complete: student s requesting transfer, amount a of transfer
+            printer.print(Printer::Courier, 'T', currJob->args.id, currJob->args.amount);
+
             if(mprng(1,6) == 1){ //lose watCard :(
-                // TODO: review this (What is "insert into future"?)
                 currJob->result.reset();
                 currJob->result.exception(new WATCardOffice::Lost);
                 delete currJob->args.watCard;
@@ -97,4 +117,5 @@ void WATCardOffice::Courier::main(){
         }
     }
     //print finished
+    printer.print(Printer::Courier, 'F');
 }

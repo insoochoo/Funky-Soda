@@ -9,6 +9,7 @@ _Task Truck {
     unsigned int *cargo;
     unsigned int index;
 
+    int getSum();
     void main();
   public:
     Truck(Printer &prt, NameServer &nameServer, BottlingPlant &plant,

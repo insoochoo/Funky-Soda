@@ -22,15 +22,19 @@ void VendingMachine::buy(Flavours flavour, WATCard &card){
 
     stock[flavour]--;
     card.withdraw(sodaCost);
-    //print flavor student
+    //print bought: flavour f of soda purchased, amount remaining r of this flavour
+    prt.print(Printer::Vending, 'B', flavour, stock[flavour]);
 }
 
 unsigned int *VendingMachine::inventory(){
+    //print start reloading by truck
+    prt.print(Printer::Vending, 'r');
     return stock;
 }
 
 void VendingMachine::restocked(){
     //print complete reloading by truck
+    prt.print(Printer::Vending, 'R');
 }
 
 unsigned int VendingMachine::cost(){
@@ -42,7 +46,8 @@ unsigned int VendingMachine::getId(){
 }
 
 void VendingMachine::main(){
-    //print started
+    //print started: cost c per bottle
+    prt.print(Printer::Vending, 'S', sodaCost);
 
     while (true) {
         _Accept(~VendingMachine){
@@ -52,4 +57,5 @@ void VendingMachine::main(){
         } or _Accept(buy);
     }
     //print ended
+    prt.print(Printer::Vending, 'F');
 }
