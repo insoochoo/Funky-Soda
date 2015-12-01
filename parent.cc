@@ -1,8 +1,9 @@
-#include "parent.h"
 #include "printer.h"
 #include "bank.h"
+#include "parent.h"
+#include "MPRNG.h"
 
-extern mprng;
+extern MPRNG mprng;
 
 void Parent::main(){
     //print start

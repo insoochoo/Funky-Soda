@@ -1,6 +1,10 @@
 #include "printer.h"
 #include "nameServer.h"
+#include "truck.h"
 #include "bottlingPlant.h"
+#include "MPRNG.h"
+
+extern MPRNG mprng;
 
 BottlingPlant::BottlingPlant(Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
                unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
@@ -16,22 +20,22 @@ BottlingPlant::BottlingPlant(Printer &prt, NameServer &nameServer, unsigned int 
 
 void BottlingPlant::getShipment(unsigned int cargo[]){
     if (shutdown) {
-        throw Shutdown;
+        throw BottlingPlant::Shutdown();
     }
 
     for (unsigned int i = 0; i < 4; i++) {
-        cargo[i] = produceCargo[i];
+        cargo[i] = producedCargo[i];
     }
 }
 
 void BottlingPlant::main(){
     //print started
-    Truck truck(prt, nameServer, this, numVendingMachines, maxStockPerFlavour);
+    Truck truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
 
     while (true){
         // make items
         for (unsigned int i = 0; i < 4; i++) {
-            produceCargo[i] = mprng(0, maxShippedPerFlavour);
+            producedCargo[i] = mprng(0, maxShippedPerFlavour);
         }
 
         //print # of bottles generated
@@ -41,7 +45,7 @@ void BottlingPlant::main(){
             _Accept(BottlingPlant::getShipment);
             break;
         } or _Accept(BottlingPlant::getShipment){
-            yield(TimeBetweenShipments);
+            yield(timeBetweenShipments);
         }
     }
     //print ended

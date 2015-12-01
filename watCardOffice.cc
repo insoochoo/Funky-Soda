@@ -1,11 +1,14 @@
 #include "printer.h"
 #include "bank.h"
 #include "watCardOffice.h"
+#include "MPRNG.h"
 
+extern MPRNG mprng;
 
 WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers){
+    couriers = new Courier* [numCouriers];
     for (unsigned int i = 0; i < numCouriers; i++) {
-        couriers[i] = new Courier(i);
+        couriers[i] = new Courier(i, bank, prt, *this);
     }
 };
 
@@ -37,13 +40,13 @@ WATCard::FWATCard WATCardOffice::transfer(unsigned int sid, unsigned int amount,
     return job->result;
 }
 
-Job *WATCardOffice::requestWork(){
+WATCardOffice::Job *WATCardOffice::requestWork(){
     //print
     if(jobs.empty()){
         jobLock.wait();
     }
 
-    Job *temp = jobs.front();
+    WATCardOffice::Job *temp = jobs.front();
     jobs.pop();
     return temp;
 }
@@ -57,7 +60,7 @@ void WATCardOffice::main(){
 }
 
 WATCardOffice::Courier::Courier(unsigned int id, Bank &bank, Printer &printer, WATCardOffice &cardOffice)
-  : id(id), bank(bank), printer(printer), office(cardOffice){}
+  : id(id), bank(bank), printer(printer), cardOffice(cardOffice){}
 
 
 void WATCardOffice::Courier::main(){
@@ -70,7 +73,7 @@ void WATCardOffice::Courier::main(){
             // print transfer start
 
             Job *currJob = cardOffice.requestWork();
-            if(currJob == null){ //error check
+            if(currJob == NULL){ //error check
                 break;
             }
 

@@ -1,12 +1,11 @@
 #include <queue>
+#include "watCard.h"
+#include "bank.h"
 
 _Task WATCardOffice{
     Printer &prt;
     Bank &bank;
     unsigned int numCouriers;
-    Courier *couriers;
-    std::queue<Job*> jobs;
-    uCondition jobLock;
 
     struct Args{
         unsigned int id;
@@ -31,6 +30,10 @@ _Task WATCardOffice{
       public:
         Courier(unsigned int id, Bank &bank, Printer &printer, WATCardOffice &cardOffice);
     };
+
+    Courier **couriers;
+    std::queue<Job*> jobs;
+    uCondition jobLock;
 
     void main();
   public:

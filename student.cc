@@ -4,12 +4,14 @@
 #include "groupoff.h"
 #include "vendingMachine.h"
 #include "student.h"
+#include "MPRNG.h"
 
+extern MPRNG mprng;
 
 Student::Student(Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff, unsigned int id, unsigned int maxPurchases)
              : prt(prt), nameServer(nameServer), cardOffice(cardOffice), groupoff(groupoff), id(id), maxPurchases(maxPurchases), boughtCount(0) {};
 
-Student::main(){
+void Student::main(){
     unsigned int numberOfBottles = mprng(1, maxPurchases);
     int favoriteFlavour = mprng(0, 3);
     WATCard::FWATCard watCard = cardOffice.create(id, 5);
@@ -25,23 +27,23 @@ Student::main(){
 
         try{
             if(!lost){
-                yield(1,10);
+                yield(mprng(1,10));
             }
             lost = false;
 
             _Select(watCard){
-                vendingMachine->buy(favoriteFlavour, watCard);
+                vendingMachine->buy(VendingMachine::Flavours(favoriteFlavour), *watCard);
             } or _Select(giftCard){
-                vendingMachine->buy(favoriteFlavour, giftCard);
+                vendingMachine->buy(VendingMachine::Flavours(favoriteFlavour), *giftCard);
                 giftCard.reset();
             } // blocks waiting for money to be transferred
 
             boughtCount++;
-        } _Catch(VendingMachine::Funds){
+        } catch(VendingMachine::Funds){
             watCard = cardOffice.transfer(id, vendingMachine->cost() + 5, watCard);
-        } _Catch(VendingMachine::Stock){
+        } catch(VendingMachine::Stock){
             vendingMachine = nameServer.getMachine(id);
-        } _Catch(WATCardOffice::Lost){
+        } catch(WATCardOffice::Lost){
             //print lost watcard
             watCard = cardOffice.create(id, 5);
             lost = true;

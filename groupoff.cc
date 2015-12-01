@@ -1,14 +1,15 @@
 #include "printer.h"
 #include "watCard.h"
 #include "groupoff.h"
+#include "MPRNG.h"
 
-extern mprng;
+extern MPRNG mprng;
 
 Groupoff::Groupoff(Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay) :
-  prt(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), fwatcards(new WATCard::FWATCard [numStudents]) {};
+  prt(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), fwatcards(new WATCard::FWATCard [numStudents]), index(0) {};
 
 WATCard::FWATCard Groupoff::giftCard(){
-    return fwatcards[counter++];
+    return fwatcards[index++];
 }
 
 void Groupoff::main() {
@@ -30,10 +31,10 @@ void Groupoff::main() {
             // TODO: look over this
             if(!fwatcards[randomize].available()){
                 yield(groupoffDelay);
-                WATCard watCard = new WATCard();
-                watCard.deposit(sodaCost);
+                WATCard *watCard = new WATCard();
+                watCard->deposit(sodaCost);
                 fwatcards[randomize].reset();
-                fwatcards[randomize].deliver(watCard);
+                fwatcards[randomize].delivery(watCard);
                 counter++;
             }
         }

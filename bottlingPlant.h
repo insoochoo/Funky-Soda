@@ -1,3 +1,6 @@
+#ifndef __BOTTLINGPLANT__
+#define __BOTTLINGPLANT__
+
 _Task BottlingPlant {
     Printer &prt;
     NameServer &nameServer;
@@ -16,3 +19,6 @@ _Task BottlingPlant {
                  unsigned int timeBetweenShipments);
     void getShipment(unsigned int cargo[]);
 };
+
+
+#endif

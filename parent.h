@@ -1,6 +1,6 @@
 _Task Parent {
-    Printer prt;
-    Bank bank;
+    Printer &prt;
+    Bank &bank;
     unsigned int numStudents;
     unsigned int parentalDelay;
 

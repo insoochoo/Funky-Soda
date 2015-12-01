@@ -1,3 +1,6 @@
+#ifndef __BANK_H__
+#define __BANK_H__
+
 _Monitor Bank {
   unsigned int numStudents;
   int *balance;
@@ -7,3 +10,5 @@ _Monitor Bank {
     void deposit(unsigned int id, unsigned int amount);
     void withdraw(unsigned int id, unsigned int amount);
 };
+
+#endif

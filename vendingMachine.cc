@@ -1,9 +1,10 @@
 #include "printer.h"
+#include "watCard.h"
 #include "nameServer.h"
 #include "vendingMachine.h"
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost, unsigned int maxStockPerFlavour):
-    prt(prt), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour), stock(new unsigned int [4]){
+    prt(prt), nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour), stock(new unsigned int [4]){
         nameServer.VMregister(this);
         for(int i = 0; i < 4; i++){
             stock[i] = 0;
@@ -12,11 +13,11 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 void VendingMachine::buy(Flavours flavour, WATCard &card){
     if (card.getBalance() < sodaCost){
-        throw Funds;
+        throw Funds();
     }
 
     if(stock[flavour] == 0) {
-        throw Stock;
+        throw Stock();
     }
 
     stock[flavour]--;

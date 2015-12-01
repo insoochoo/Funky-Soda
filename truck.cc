@@ -1,6 +1,11 @@
 #include "printer.h"
 #include "nameServer.h"
+#include "bottlingPlant.h"
 #include "truck.h"
+#include "vendingMachine.h"
+#include "MPRNG.h"
+
+extern MPRNG mprng;
 
 Truck::Truck(Printer &prt, NameServer &nameServer, BottlingPlant &plant,
            unsigned int numVendingMachines, unsigned int maxStockPerFlavour) :
@@ -8,7 +13,7 @@ Truck::Truck(Printer &prt, NameServer &nameServer, BottlingPlant &plant,
     maxStockPerFlavour(maxStockPerFlavour), cargo(new unsigned int [4]), index(0){};
 
 
-void Truck::Truck main(){
+void Truck::main(){
     // print start
 
     while(true){
@@ -48,7 +53,7 @@ void Truck::Truck main(){
                 // print end delivery to vending machine
             }
 
-        } _Catch (Shutdown){
+        } catch (BottlingPlant::Shutdown){
             break;
         }
     }

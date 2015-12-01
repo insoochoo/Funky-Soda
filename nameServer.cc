@@ -3,7 +3,7 @@
 
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents )
       : prt(prt), numVendingMachines(numVendingMachines), numStudents(numStudents), vendingMachineCount(0),
-        studentCountList(new int [numStudents]), vendingMachineList(new VendingMachine* [numVendingMachines]) {};
+        studentCountList(new unsigned int[numStudents]), vendingMachineList(new VendingMachine* [numVendingMachines]) {};
 
 void NameServer::VMregister(VendingMachine *vendingmachine){
     vendingMachineList[vendingMachineCount] = vendingmachine;
