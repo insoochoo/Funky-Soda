@@ -82,7 +82,7 @@ WATCardOffice::Courier::Courier(unsigned int id, Bank &bank, Printer &printer, W
 
 void WATCardOffice::Courier::main(){
     //print start
-    printer.print(Printer::Courier, 'S', id);
+    printer.print(Printer::Courier, id, 'S');
 
     while(true){
         _Accept(~Courier){
@@ -93,14 +93,14 @@ void WATCardOffice::Courier::main(){
                 break;
             }
             // print transfer start: student s requesting transfer, amount a of transfer
-            printer.print(Printer::Courier, 't', id, currJob->args.id, currJob->args.amount);
+            printer.print(Printer::Courier, id, 't', currJob->args.id, currJob->args.amount);
 
             // update
             bank.withdraw(currJob->args.id, currJob->args.amount);
             currJob->args.watCard->deposit(currJob->args.amount);
 
             // print transfer complete: student s requesting transfer, amount a of transfer
-            printer.print(Printer::Courier, 'T', id, currJob->args.id, currJob->args.amount);
+            printer.print(Printer::Courier, id, 'T', currJob->args.id, currJob->args.amount);
 
             if(mprng(1,6) == 1){ //lose watCard :(
                 currJob->result.reset();
@@ -117,5 +117,5 @@ void WATCardOffice::Courier::main(){
         }
     }
     //print finished
-    printer.print(Printer::Courier, 'F', id);
+    printer.print(Printer::Courier, id, 'F');
 }

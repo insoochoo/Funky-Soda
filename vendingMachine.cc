@@ -23,7 +23,7 @@ void VendingMachine::buy(Flavours flavour, WATCard &card){
     stock[flavour]--;
     card.withdraw(sodaCost);
     //print bought: flavour f of soda purchased, amount remaining r of this flavour
-    prt.print(Printer::Vending, 'B', id, flavour, stock[flavour]);
+    prt.print(Printer::Vending, id, 'B', flavour, stock[flavour]);
 }
 
 unsigned int *VendingMachine::inventory(){
