@@ -17,16 +17,12 @@ Printer::Printer(unsigned int numStudents, unsigned int numVendingMachines, unsi
 
     for(unsigned i = 0; i < numStudents; i++){
         cout << "Stud" << i;
-        if(i < numStudents-1){
-            cout << "\t";
-        }
+        cout << "\t";
     }
 
     for(unsigned i = 0; i < numVendingMachines; i++){
         cout << "Mach" << i;
-        if(i < numVendingMachines-1){
-            cout << "\t";
-        }
+        cout << "\t";
     }
 
     for(unsigned i = 0; i < numCouriers; i++){
@@ -72,6 +68,7 @@ void Printer::printColumn(){
         bufferSecond[i] = -1;
         bufferThird[i] = -1;
     }
+    cout << endl;
 }
 
 void Printer::finalFlush(unsigned id){
@@ -91,6 +88,7 @@ void Printer::finalFlush(unsigned id){
         bufferSecond[i] = -1;
         bufferThird[i] = -1;
     }
+    cout << endl;
 }
 
 unsigned int Printer::getID(Kind kind, unsigned int lid){
