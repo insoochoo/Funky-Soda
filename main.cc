@@ -91,12 +91,14 @@ void uMain::main(){
         students[i] = new Student(prt, nameServer, watCardOffice, groupoff, i, config.maxPurchases);
     }
 
-    delete parent;
-    for(unsigned int i = 0; i < config.numVendingMachines; i++){
-        delete VMs[i];
-    }
-    delete bottlingPlant;
+
     for(unsigned int i = 0; i < config.numStudents; i++){
         delete students[i];
+    }
+    delete parent;
+
+    delete bottlingPlant;
+    for(unsigned int i = 0; i < config.numVendingMachines; i++){
+        delete VMs[i];
     }
 }

@@ -40,7 +40,11 @@ void NameServer::main(){
         _Accept(VMregister);
     }
 
-    _Accept(~NameServer);
+    while(true){
+        _Accept(~NameServer){
+            break;
+        } or _Accept(getMachine){} or _Accept(getMachineList){}
+    }
 
     //print finished
     prt.print(Printer::NameServer, 'F');
