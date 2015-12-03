@@ -34,10 +34,12 @@ _Task WATCardOffice{
     Courier **couriers;
     std::queue<Job*> jobs;
     uCondition jobLock;
+    bool finished;
 
     void main();
   public:
     _Event Lost{};                        // lost WATCard
+    ~WATCardOffice();
     WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers);
     WATCard::FWATCard create(unsigned int sid, unsigned int amount);
     WATCard::FWATCard transfer(unsigned int sid, unsigned int amount, WATCard *card);

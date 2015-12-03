@@ -38,7 +38,7 @@ void Groupoff::main() {
                 // print gift amount deposited
                 prt.print(Printer::Groupoff, 'D', sodaCost);
 
-                fwatcards[randomize].reset();
+                //fwatcards[randomize].reset();
                 fwatcards[randomize].delivery(watCard);
                 counter++;
             }

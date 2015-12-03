@@ -1,3 +1,4 @@
+#include <iostream>
 #include "printer.h"
 #include "bank.h"
 #include "watCardOffice.h"
@@ -5,7 +6,7 @@
 
 extern MPRNG mprng;
 
-WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers){
+WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers), finished(false){
     couriers = new Courier* [numCouriers];
     for (unsigned int i = 0; i < numCouriers; i++) {
         couriers[i] = new Courier(i, bank, prt, *this);
@@ -46,6 +47,10 @@ WATCardOffice::Job *WATCardOffice::requestWork(){
         jobLock.wait();
     }
 
+    if(finished){
+        return NULL;
+    }
+
     WATCardOffice::Job *temp = jobs.front();
     jobs.pop();
 
@@ -54,26 +59,30 @@ WATCardOffice::Job *WATCardOffice::requestWork(){
     return temp;
 }
 
+WATCardOffice::~WATCardOffice(){
+    //print finished
+    prt.print(Printer::WATCardOffice, 'F');
+
+    for(unsigned int i = 0; i < numCouriers; i++){
+        delete couriers[i];
+    }
+    delete couriers;
+}
+
 void WATCardOffice::main(){
     //print starting
     prt.print(Printer::WATCardOffice, 'S');
     while(true){
         _Accept(~WATCardOffice){
-
-            while(!jobs.empty()){
-                WATCardOffice::Job *temp = jobs.front();
-                jobs.pop();
-                delete temp;
-            }
+            finished = true;
 
             for(unsigned int i = 0; i < numCouriers; i++){
-                delete couriers[i];
+                jobLock.signal();
             }
-            delete couriers;
+            break;
         } or _Accept(WATCardOffice::create){} or _Accept(WATCardOffice::transfer){} or _Accept(WATCardOffice::requestWork){}
     }
-    //print finished
-    prt.print(Printer::WATCardOffice, 'F');
+
 }
 
 WATCardOffice::Courier::Courier(unsigned int id, Bank &bank, Printer &printer, WATCardOffice &cardOffice)
