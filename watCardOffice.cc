@@ -6,6 +6,17 @@
 
 extern MPRNG mprng;
 
+WATCardOffice::~WATCardOffice(){
+    //print finished
+    prt.print(Printer::WATCardOffice, 'F');
+
+    for(unsigned int i = 0; i < numCouriers; i++){
+        delete couriers[i];
+    }
+
+    delete couriers;
+}
+
 WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers), finished(false){
     couriers = new Courier* [numCouriers];
     for (unsigned int i = 0; i < numCouriers; i++) {
@@ -57,16 +68,6 @@ WATCardOffice::Job *WATCardOffice::requestWork(){
     // print request work complete
     prt.print(Printer::WATCardOffice, 'W');
     return temp;
-}
-
-WATCardOffice::~WATCardOffice(){
-    //print finished
-    prt.print(Printer::WATCardOffice, 'F');
-
-    for(unsigned int i = 0; i < numCouriers; i++){
-        delete couriers[i];
-    }
-    delete couriers;
 }
 
 void WATCardOffice::main(){

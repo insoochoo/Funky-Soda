@@ -39,6 +39,7 @@ _Monitor Printer {
     void finalFlush(unsigned int lid);
   public:
     enum Kind {Parent, Groupoff, WATCardOffice, NameServer, Truck, BottlingPlant, Student, Vending, Courier};
+    ~Printer();
     Printer(unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers);
     void print(Kind kind, char state);
     void print(Kind kind, char state, int value1);

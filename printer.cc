@@ -2,6 +2,11 @@ using namespace std;
 #include <iostream>
 #include "printer.h"
 
+Printer::~Printer() {
+    delete bufferStates;
+    delete bufferSecond;
+    delete bufferThird;
+}
 Printer::Printer(unsigned int numStudents, unsigned int numVendingMachines, unsigned int numCouriers) :
   totalCount(numStudents + numVendingMachines + numCouriers + 6),
   numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers),
