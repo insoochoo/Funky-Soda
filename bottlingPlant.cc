@@ -38,9 +38,9 @@ void BottlingPlant::main(){
     prt.print(Printer::BottlingPlant, 'S');
     Truck truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
 
-    int count = 0;
 
     while (true){
+        int count = 0;
         // make items
         for (unsigned int i = 0; i < 4; i++) {
             producedCargo[i] = mprng(0, maxShippedPerFlavour);
