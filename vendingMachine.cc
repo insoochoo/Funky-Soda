@@ -3,6 +3,10 @@
 #include "nameServer.h"
 #include "vendingMachine.h"
 
+VendingMachine::~VendingMachine() {
+    delete stock;
+}
+
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost, unsigned int maxStockPerFlavour):
     prt(prt), nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour), stock(new unsigned int [4]){
         nameServer.VMregister(this);

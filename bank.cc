@@ -1,5 +1,9 @@
 #include "bank.h"
 
+Bank::~Bank(){
+    delete balance;
+}
+
 Bank::Bank(unsigned int numStudents) : numStudents(numStudents), balance(new int[numStudents]){
     for (unsigned int i = 0; i < numStudents; i++) {
         balance[i] = 0;

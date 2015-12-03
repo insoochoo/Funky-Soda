@@ -12,6 +12,7 @@ _Task Truck {
     int getSum();
     void main();
   public:
+    ~Truck();
     Truck(Printer &prt, NameServer &nameServer, BottlingPlant &plant,
            unsigned int numVendingMachines, unsigned int maxStockPerFlavour);
 };

@@ -2,6 +2,10 @@
 #include "vendingMachine.h"
 #include "nameServer.h"
 
+NameServer::~NameServer() {
+    delete studentCountList;
+    delete vendingMachineList;
+}
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents )
       : prt(prt), numVendingMachines(numVendingMachines), numStudents(numStudents), vendingMachineCount(0),
         studentCountList(new unsigned int[numStudents]), vendingMachineList(new VendingMachine* [numVendingMachines]) {};
