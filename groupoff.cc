@@ -28,7 +28,7 @@ void Groupoff::main() {
             if(counter == numStudents){
                 break;
             }
-            int randomize = mprng(0,numStudents);
+            int randomize = mprng(0,numStudents-1);
             // TODO: look over this
             if(!fwatcards[randomize].available()){
                 yield(groupoffDelay);
