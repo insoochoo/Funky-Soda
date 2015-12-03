@@ -20,6 +20,7 @@ BottlingPlant::BottlingPlant(Printer &prt, NameServer &nameServer, unsigned int 
 
 void BottlingPlant::getShipment(unsigned int cargo[]){
     if (shutdown) {
+        uRendezvousAcceptor();
         throw BottlingPlant::Shutdown();
     }
 

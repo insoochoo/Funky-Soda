@@ -103,12 +103,12 @@ void WATCardOffice::Courier::main(){
             printer.print(Printer::Courier, id, 'T', currJob->args.id, currJob->args.amount);
 
             if(mprng(1,6) == 1){ //lose watCard :(
-                currJob->result.reset();
+                //currJob->result.reset();
                 currJob->result.exception(new WATCardOffice::Lost);
                 delete currJob->args.watCard;
             }
             else{
-                currJob->result.reset();
+                //currJob->result.reset();
                 currJob->result.delivery(currJob->args.watCard);
                 //print something
             }

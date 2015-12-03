@@ -13,10 +13,12 @@ VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned in
 
 void VendingMachine::buy(Flavours flavour, WATCard &card){
     if (card.getBalance() < sodaCost){
+        uRendezvousAcceptor();
         throw Funds();
     }
 
-    if(stock[flavour] == 0) {
+    if(stock[flavour] == 0){
+        uRendezvousAcceptor();
         throw Stock();
     }
 
