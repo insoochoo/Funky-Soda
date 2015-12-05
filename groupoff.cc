@@ -12,6 +12,15 @@ WATCard::FWATCard Groupoff::giftCard(){
     return fwatcards[index++];
 }
 
+Groupoff::~Groupoff(){
+    for (unsigned int i = 0; i < numStudents; i++){
+        if(fwatcards[i].available()) {
+            delete fwatcards[i]();
+        }
+    }
+    delete[] fwatcards;
+}
+
 void Groupoff::main() {
     //print start
     prt.print(Printer::Groupoff, 'S');

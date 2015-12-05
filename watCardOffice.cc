@@ -7,14 +7,13 @@
 extern MPRNG mprng;
 
 WATCardOffice::~WATCardOffice(){
-    //print finished
-    prt.print(Printer::WATCardOffice, 'F');
-
     for(unsigned int i = 0; i < numCouriers; i++){
         delete couriers[i];
     }
 
-    delete couriers;
+    delete[] couriers;
+    //print finished
+    prt.print(Printer::WATCardOffice, 'F');
 }
 
 WATCardOffice::WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers) : prt(prt), bank(bank), numCouriers(numCouriers), finished(false){
@@ -120,6 +119,7 @@ void WATCardOffice::Courier::main(){
             else{
                 //currJob->result.reset();
                 currJob->result.delivery(currJob->args.watCard);
+                //delete currJob->args.watCard;
                 //print something
             }
             // print transfer finished

@@ -45,10 +45,12 @@ void Student::main(){
                 // watcard balance b after purchase
                 prt.print(Printer::Student, id, 'B', watCard()->getBalance());
             } or _Select(giftCard){
+                WATCard *container = giftCard;
                 vendingMachine->buy(VendingMachine::Flavours(favoriteFlavour), *giftCard);
                 // giftcard balance b
                 prt.print(Printer::Student, id, 'G', giftCard()->getBalance());
                 giftCard.reset();
+                delete container;
             } // blocks waiting for money to be transferred
 
             boughtCount++;
@@ -64,6 +66,10 @@ void Student::main(){
             lost = true;
         }
     }
+
+    WATCard* wat = watCard();
+    delete wat;
+
     //print finish
     prt.print(Printer::Student, id, 'F');
 }

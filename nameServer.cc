@@ -3,8 +3,8 @@
 #include "nameServer.h"
 
 NameServer::~NameServer() {
-    delete studentCountList;
-    delete vendingMachineList;
+    delete[] studentCountList;
+    delete[] vendingMachineList;
 }
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents )
       : prt(prt), numVendingMachines(numVendingMachines), numStudents(numStudents), vendingMachineCount(0),

@@ -7,7 +7,7 @@
 extern MPRNG mprng;
 
 BottlingPlant::~BottlingPlant() {
-    delete producedCargo;
+    delete[] producedCargo;
 }
 BottlingPlant::BottlingPlant(Printer &prt, NameServer &nameServer, unsigned int numVendingMachines,
                unsigned int maxShippedPerFlavour, unsigned int maxStockPerFlavour,
@@ -36,7 +36,7 @@ void BottlingPlant::getShipment(unsigned int cargo[]){
 
 void BottlingPlant::main(){
     prt.print(Printer::BottlingPlant, 'S');
-    Truck truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
+    Truck *truck = new Truck(prt, nameServer, *this, numVendingMachines, maxStockPerFlavour);
 
 
     while (true){
@@ -58,5 +58,6 @@ void BottlingPlant::main(){
             yield(timeBetweenShipments);
         }
     }
+    delete truck;
     prt.print(Printer::BottlingPlant, 'F');
 }
