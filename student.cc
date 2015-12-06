@@ -67,8 +67,12 @@ void Student::main(){
         }
     }
 
-    WATCard* wat = watCard();
-    delete wat;
+    // delete the last watcard student was using
+    // if lost, no need to delete, since the watcard is already deleted
+    try{
+        WATCard* wat = watCard();
+        delete wat;
+    } catch(WATCardOffice::Lost){}
 
     //print finish
     prt.print(Printer::Student, id, 'F');

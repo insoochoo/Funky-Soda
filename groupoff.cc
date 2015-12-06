@@ -6,7 +6,12 @@
 extern MPRNG mprng;
 
 Groupoff::Groupoff(Printer &prt, unsigned int numStudents, unsigned int sodaCost, unsigned int groupoffDelay) :
-  prt(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay), fwatcards(new WATCard::FWATCard [numStudents]), index(0) {};
+  prt(prt), numStudents(numStudents), sodaCost(sodaCost), groupoffDelay(groupoffDelay),
+  fwatcards(new WATCard::FWATCard [numStudents]), index(0), available(new bool[numStudents]) {
+    for(unsigned int i = 0; i < numStudents; i++){
+        available[i] = true;
+    }
+};
 
 WATCard::FWATCard Groupoff::giftCard(){
     return fwatcards[index++];
@@ -19,6 +24,7 @@ Groupoff::~Groupoff(){
         }
     }
     delete[] fwatcards;
+    delete[] available;
 }
 
 void Groupoff::main() {
@@ -39,7 +45,7 @@ void Groupoff::main() {
             }
             int randomize = mprng(0,numStudents-1);
             // TODO: look over this
-            if(!fwatcards[randomize].available()){
+            if(available[randomize]){
                 yield(groupoffDelay);
                 WATCard *watCard = new WATCard();
                 watCard->deposit(sodaCost);
@@ -50,6 +56,8 @@ void Groupoff::main() {
                 //fwatcards[randomize].reset();
                 fwatcards[randomize].delivery(watCard);
                 counter++;
+
+                available[randomize] = false;
             }
         }
     }

@@ -7,6 +7,7 @@ _Task Groupoff {
     WATCard::FWATCard *fwatcards;
 
     int index;
+    bool *available;
 
     void main();
   public:
