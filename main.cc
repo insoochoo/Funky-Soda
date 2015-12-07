@@ -19,7 +19,7 @@ MPRNG mprng;
 
 
 void usage(char *argv) {
-    cerr << "Usage: " << argv << "  err msg" << endl;
+    cerr << "Usage: " << argv << "  [ config-file [ random-seed (> 0) ] ]" << endl;
     exit(-1);
 }
 
