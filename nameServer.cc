@@ -6,6 +6,7 @@ NameServer::~NameServer() {
     delete[] studentCountList;
     delete[] vendingMachineList;
 }
+
 NameServer::NameServer( Printer &prt, unsigned int numVendingMachines, unsigned int numStudents )
       : prt(prt), numVendingMachines(numVendingMachines), numStudents(numStudents), vendingMachineCount(0),
         studentCountList(new unsigned int[numStudents]), vendingMachineList(new VendingMachine* [numVendingMachines]) {};
@@ -20,6 +21,8 @@ void NameServer::VMregister(VendingMachine *vendingmachine){
 
 VendingMachine *NameServer::getMachine(unsigned int id){
     unsigned int index = studentCountList[id];
+
+    // student should get a different VM each time
     studentCountList[id] = (studentCountList[id] + 1) % numVendingMachines;
 
     // student s requesting vending machine, new vending machine v
@@ -37,10 +40,12 @@ void NameServer::main(){
     prt.print(Printer::NameServer, 'S');
 
     for(unsigned int i = 0; i < numStudents; i++){
+        // student is initially assigned a vending machine
         studentCountList[i] = i % numVendingMachines;
     }
 
     for(unsigned int i = 0; i < numVendingMachines; i++){
+        // wait for all vendingmachines to be created
         _Accept(VMregister);
     }
 

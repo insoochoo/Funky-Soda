@@ -7,7 +7,7 @@ _Task Groupoff {
     WATCard::FWATCard *fwatcards;
 
     int index;
-    bool *available;
+    bool *available;// keep track of which students have received a giftcard
 
     void main();
   public:

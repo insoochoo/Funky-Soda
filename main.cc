@@ -24,8 +24,8 @@ void usage(char *argv) {
 }
 
 void uMain::main(){
-    int seed = getpid();
-    string fname = "config.txt";
+    int seed = getpid(); // default seed value
+    string fname = "config.txt"; // default config file
 
     try{
         switch(argc) {
@@ -69,11 +69,15 @@ void uMain::main(){
         { "ParentalDelay", false, cparms.parentalDelay },
         { "NumCouriers", false, cparms.numCouriers },
     */
+
+    // set seed for random function
     mprng.seed(seed);
 
+    // process config variables
     ConfigParms config;
     processConfigFile(fname.c_str(), config);
 
+    // initiate all tasks of the program
     Student *students[config.numStudents];
     VendingMachine *VMs[config.numVendingMachines];
 
@@ -83,15 +87,20 @@ void uMain::main(){
     WATCardOffice watCardOffice(prt, bank, config.numCouriers);
     Groupoff groupoff(prt, config.numStudents, config.sodaCost, config.groupoffDelay);
     NameServer nameServer(prt, config.numVendingMachines, config.numStudents);
+
+    // initialize vending machines
     for(unsigned int i = 0; i < config.numVendingMachines; i++){
         VMs[i] = new VendingMachine(prt, nameServer, i, config.sodaCost, config.maxStockPerFlavour);
     }
+
     BottlingPlant *bottlingPlant = new BottlingPlant(prt, nameServer, config.numVendingMachines, config.maxShippedPerFlavour, config.maxStockPerFlavour, config.timeBetweenShipments);
+
+    // initialize students
     for(unsigned int i = 0; i < config.numStudents; i++){
         students[i] = new Student(prt, nameServer, watCardOffice, groupoff, i, config.maxPurchases);
     }
 
-
+    // finish all tasks
     for(unsigned int i = 0; i < config.numStudents; i++){
         delete students[i];
     }

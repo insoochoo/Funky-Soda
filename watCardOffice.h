@@ -20,7 +20,6 @@ _Task WATCardOffice{
     };
 
     _Task Courier{ // communicates with bank
-        //TODO
         unsigned int id;
         Bank &bank;
         Printer &printer;
@@ -32,8 +31,8 @@ _Task WATCardOffice{
     };
 
     Courier **couriers;
-    std::queue<Job*> jobs;
-    uCondition jobLock;
+    std::queue<Job*> jobs; // queue of jobs that couriers will access
+    uCondition jobLock; // sync lock for courier tasks
     bool finished;
 
     void main();
@@ -43,5 +42,5 @@ _Task WATCardOffice{
     WATCardOffice(Printer &prt, Bank &bank, unsigned int numCouriers);
     WATCard::FWATCard create(unsigned int sid, unsigned int amount);
     WATCard::FWATCard transfer(unsigned int sid, unsigned int amount, WATCard *card);
-    Job *requestWork();
+    Job *requestWork(); // retrieve a job from jobs queue
 };

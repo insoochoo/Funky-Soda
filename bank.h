@@ -3,7 +3,7 @@
 
 _Monitor Bank {
   unsigned int numStudents;
-  int *balance;
+  int *balance; // array of student balances
 
   public:
     ~Bank();

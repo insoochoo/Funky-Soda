@@ -10,7 +10,7 @@ _Task BottlingPlant {
     unsigned int timeBetweenShipments;
 
     unsigned int *producedCargo;
-    bool shutdown;
+    bool shutdown; // flag to check if plant has shut down
     void main();
   public:
     _Event Shutdown{};                    // shutdown plant

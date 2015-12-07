@@ -9,18 +9,23 @@ VendingMachine::~VendingMachine() {
 
 VendingMachine::VendingMachine(Printer &prt, NameServer &nameServer, unsigned int id, unsigned int sodaCost, unsigned int maxStockPerFlavour):
     prt(prt), nameServer(nameServer), id(id), sodaCost(sodaCost), maxStockPerFlavour(maxStockPerFlavour), stock(new unsigned int [4]){
+        // register this vending machine to the nameServer
         nameServer.VMregister(this);
+
+        // initialize inventory stocks
         for(int i = 0; i < 4; i++){
             stock[i] = 0;
         }
     };
 
 void VendingMachine::buy(Flavours flavour, WATCard &card){
+    // if card has insufficient balance, exit
     if (card.getBalance() < sodaCost){
         uRendezvousAcceptor();
         throw Funds();
     }
 
+    // if flavour is out, exit
     if(stock[flavour] == 0){
         uRendezvousAcceptor();
         throw Stock();
@@ -58,7 +63,7 @@ void VendingMachine::main(){
     while (true) {
         _Accept(~VendingMachine){
             break;
-        } or _Accept(inventory){    // don't accept buy while restocking
+        } or _Accept(inventory){ // don't accept buy while restocking
             _Accept(restocked);
         } or _Accept(buy);
     }

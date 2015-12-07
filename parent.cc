@@ -14,12 +14,15 @@ void Parent::main(){
             break;
         } _Else {
             yield(parentalDelay);
+
+            // randomly assign money and student
             unsigned int amount = mprng(1,3);
             unsigned int id = mprng(0,numStudents-1);
 
             // student s receiving gift, amount of gift g
             prt.print(Printer::Parent, 'D', id, amount);
 
+            // deposit money to the student's bank account
             bank.deposit(id, amount);
         }
     }

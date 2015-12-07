@@ -7,7 +7,7 @@ _Task NameServer {
     Printer &prt;
     unsigned int numVendingMachines;
     unsigned int numStudents;
-    unsigned int *studentCountList;
+    unsigned int *studentCountList; // keeps record of student's last access VM
     int vendingMachineCount;
     VendingMachine **vendingMachineList;
 

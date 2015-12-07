@@ -11,7 +11,7 @@ Printer::Printer(unsigned int numStudents, unsigned int numVendingMachines, unsi
   totalCount(numStudents + numVendingMachines + numCouriers + 6),
   numStudents(numStudents), numVendingMachines(numVendingMachines), numCouriers(numCouriers),
   bufferStates(new int[totalCount]), bufferSecond(new int[totalCount]), bufferThird(new int[totalCount]){
-    //Something
+    // formatted setup for printing
 
     cout << "Parent\t";
     cout << "Gropoff\t";

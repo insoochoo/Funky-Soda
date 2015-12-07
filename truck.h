@@ -7,7 +7,7 @@ _Task Truck {
     unsigned int numVendingMachines;
     unsigned int maxStockPerFlavour;
     unsigned int *cargo;
-    unsigned int index;
+    unsigned int index; // represents the id of next vending machine to go to
 
     int getSum();
     void main();
